@@ -22,7 +22,8 @@ def search(x, y):
             ny = y + dy[i]
             if nx < 0 or nx >= N or ny < 0 or ny >= N:
                 continue
-            if not visited[nx][ny] and board[nx][ny] == color or board[nx][ny] == 0:
+
+            if not visited[nx][ny] and (board[nx][ny] == color or board[nx][ny] == 0):
                 cnt += 1
                 q.append((nx, ny))
                 path.append((nx, ny))
