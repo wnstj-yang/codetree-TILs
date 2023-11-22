@@ -52,8 +52,6 @@ def operate_col():
                 board[k][j] = 0
 
 
-
-
 r, c, k = map(int, input().split())
 r -= 1
 c -= 1
@@ -65,6 +63,9 @@ for i in range(3):
         board[i][j] = first[i][j]
 time = 0
 while True:
+    if board[r][c] == k:
+        break
+        
     if n >= m:
         operate_row()
     else:
@@ -72,7 +73,5 @@ while True:
     time += 1
     if time > 100:
         time = -1
-        break
-    if board[r][c] == k:
         break
 print(time)
