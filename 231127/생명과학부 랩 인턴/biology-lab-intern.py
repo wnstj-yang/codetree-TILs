@@ -1,5 +1,5 @@
 # 2023-11-27
-# 13:30 ~ 14:05 / 17: 35 ~
+# 13:30 ~ 14:05 / 17: 35 ~ 19:00
 
 
 # 순서대로 열을 움직이면서 곰팡이를 채취
@@ -13,6 +13,7 @@ def get_mold(j):
             return
 
 
+# 격자판 벗어날 떄 방향 전환
 def check_direction(d):
     if d == 0:
         return 1
@@ -31,25 +32,28 @@ def move_mold():
         for y in range(M):
             if board[x][y]:
                 b, s, d = board[x][y]
-                ns = s
-                # while문으로 변경해서 하나씩 움직이기
-                # 범위도 체크하지만 다른 곰팡이가 존재하는지도 체크
-                ox, oy = x, y
+                ns = s # 속도를 줄여나가면서 이동을 한다고 가정하기 떄문에 새로운 변수에 속도 저장
+                ox, oy = x, y # x, y로 for문을 돌아서 따로 변수로 설정
                 while ns:
                     nx = ox + dx[d]
                     ny = oy + dy[d]
-
+                    
+                    # 격자판 범위를 벗어낫으므로 방향 전환
                     if nx < 0 or nx >= N or ny < 0 or ny >= M:
                         d = check_direction(d)
                         nx = ox + dx[d]
                         ny = oy + dy[d]
                     ns -= 1
-                    ox, oy = nx, ny
+                    ox, oy = nx, ny # 이동한 좌표 값들을 갱신
+                # 마지막 이동한 만큼 이동하고 다음 격자판에 넣는다
                 next_board[ox][oy].append([b, s, d])
+                
+    # 이동이 완료된 부분에서 여러 개의 곰팡이가 존재할 경우 
     for i in range(N):
         for j in range(M):
             if next_board[i][j]:
                 next_board[i][j].sort(key=lambda x:(-x[0]))
+                # 가장 큰 곰팡이가 살아남으므로 크기로 내림차순 정렬한 첫 번쨰 값을 넣어준다
                 next_value = [next_board[i][j][0][0], next_board[i][j][0][1], next_board[i][j][0][2]]
                 next_board[i][j] = next_value
     return next_board
@@ -58,7 +62,6 @@ def move_mold():
 N, M, K = map(int, input().split())
 
 board = [[[] for _ in range(M)] for _ in range(N)]
-search = 0
 total = 0
 # 문제 조건대로 1 ~ 4 / 상하우좌 순
 dx = [-1, 1, 0, 0]
