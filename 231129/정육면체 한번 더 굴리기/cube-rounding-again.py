@@ -58,7 +58,7 @@ for _ in range(M):
     if nx < 0 or nx >= N or ny < 0 or ny >= N:
         direc = (direc + 2) % 4
         nx = cx + dx[direc]
-        ny = ny + dy[direc]
+        ny = cy + dy[direc]
     rotate(direc)
     cx, cy = nx, ny
     total += get_score(cx, cy)
