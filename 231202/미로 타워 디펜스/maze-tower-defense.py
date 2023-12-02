@@ -1,12 +1,14 @@
 # 2023-12-02
-# 14:20 ~
+# 14:20 ~ 16:20
+# 예외 처리에 대한 중복 코드가 늘어나는 데 추후 합쳐서 정리해야할 듯 하다.
 
 from collections import deque
 
 
 def attack(d, p):
     global total
-
+    
+    # 중앙의 플레이어 위치에서 p만큼 값을 없애고 없앤 값은 결과값에 더해준다. 범위를 나가면 끝
     for i in range(1, p + 1):
         nx = sx + dx[d] * i
         ny = sy + dy[d] * i
@@ -16,33 +18,40 @@ def attack(d, p):
         board[nx][ny] = 0
 
 
+# 아래의 채우는 로직 내에 달팽이처럼 살펴보는 것은 다른 함수에서도 동일하기에 해당 부분에서만 주석
 def fill():
-    length = 1
-    cnt = 2
-    direc = 0
-    x, y = N // 2, N // 2
+    length = 1 # 길이만큼 움직이고 꺾이는 부분이 존재한다
+    cnt = 2 # 길이가 N - 1 제외하고는 length만큼 2번 꺾는다
+    direc = 0 # 방향
+    x, y = N // 2, N // 2 # 중앙에서 시작
     empty = deque()
     while True:
         for _ in range(length):
             nx = x + dx[direc]
             ny = y + dy[direc]
+            # 0이면 비어있으므로 리스트에 좌표 값 추가
             if board[nx][ny] == 0:
                 empty.append((nx, ny))
             else:
+                # 현재 위치가 0보다 크고 기존에 빈 공간이 있다면 현재 값으로 채워넣고 0으로 초기화, 빈 공간에 좌표 추가를 진행
                 if empty:
                     ex, ey = empty.popleft()
                     board[ex][ey] = board[nx][ny]
                     board[nx][ny] = 0
                     empty.append((nx, ny))
             x, y = nx, ny
+        # 첫 번째 위치 즉, 달팽의 순회의 끝에 오면 끝
         if x == 0 and y == 0:
             return
-
+        
+        # cnt를 줄여나가며 방향과 꺾는 부분을 갱신
         cnt -= 1
         direc = (direc + 1) % 4
+        # length의 길이로 cnt만큼 꺾었으면 length증가 및 cnt 초기화
         if cnt == 0:
             length += 1
             cnt = 2
+            # 달팽의 순회의 마지막 길이가 N - 1이고, 마지막 길이면 3번 꺾기에 cnt = 3으로 초기화
             if length == N - 1:
                 cnt = 3
 
@@ -71,6 +80,7 @@ def delete():
                         board[i][j] = 0
                 return deleted
 
+            # 같은 값이라면 개수 증가 및 좌표 추가
             if board[nx][ny] == value:
                 same_cnt += 1
                 same.append((nx, ny))
