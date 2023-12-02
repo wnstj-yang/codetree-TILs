@@ -64,6 +64,11 @@ def delete():
             ny = y + dy[direc]
             # 빈 공간 없이 채워져서 순회하므로 비어있다면 끝
             if board[nx][ny] == 0:
+                if same_cnt >= 4:
+                    deleted = True
+                    for i, j in same:
+                        total += board[i][j]
+                        board[i][j] = 0
                 return deleted
 
             if board[nx][ny] == value:
