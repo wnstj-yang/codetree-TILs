@@ -1,10 +1,11 @@
 # 2023-12-03
-# 21:35 ~
+# 21:35 ~ 23:00
 
 
 from collections import deque
 
 
+# group 좌표들 구하기
 def get_group(x, y):
     group = [(x, y)]
     q = deque()
@@ -18,6 +19,7 @@ def get_group(x, y):
             ny = y + dy[i]
             if nx < 0 or nx >= N or ny < 0 or ny >= N:
                 continue
+            # 같은 숫자이고 방문하지 않은 곳이여야 한다.
             if not visited[nx][ny] and board[nx][ny] == number:
                 visited[nx][ny] = True
                 group.append((nx, ny))
@@ -25,6 +27,7 @@ def get_group(x, y):
     return group
 
 
+# 경계선의 개수를 구하기
 def get_borders(coors, target):
     cnt = 0
     target_num = board[target[0][0]][target[0][1]]
@@ -34,7 +37,8 @@ def get_borders(coors, target):
             ny = y + dy[i]
             if nx < 0 or nx >= N or ny < 0 or ny >= N:
                 continue
-
+            # 숫자를 파악하고 좌표 값이 target에 존재하는지 확인
+            # 4방향을 파악하기 때문에 다른 숫자도 볼 수 있어서 숫자도 조건에 들어가야 한다.
             if board[nx][ny] == target_num and (nx, ny) in target:
                 cnt += 1
     return cnt
