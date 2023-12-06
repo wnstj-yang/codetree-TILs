@@ -44,8 +44,8 @@ def move():
 
 def get_square():
     for l in range(2, N):
-        for i in range(N - l - 1):
-            for j in range(N - l - 1):
+        for i in range(N - l + 1):
+            for j in range(N - l + 1):
                 # 여기서 문제 한 번 더 읽고 코드 작성 ! + 회전 시 로직 추가
                 is_people = False
                 is_exit = False
@@ -90,7 +90,7 @@ def rotate(length, x, y):
                 ey = j
                 continue
             board[i][j] -= 1
-            if board[i][j] <= 0:
+            if board[i][j] < 0:
                 board[i][j] = 0
 
 
@@ -119,4 +119,4 @@ for i in range(K):
         continue
     rotate(l, x, y)
 print(total)
-print(ex, ey)
+print(ex + 1, ey + 1)
