@@ -42,7 +42,7 @@ def search_strongest():
                 continue
             if board[i][j] == max_value:
                 strong_list.append((attacked[i][j], i + j, i, j))
-    strong_list.sort(key=lambda x:(x[0], x[1], x[2]))
+    strong_list.sort(key=lambda x:(x[0], x[1], x[3]))
     sx, sy = strong_list[0][2], strong_list[0][3]
 
 
