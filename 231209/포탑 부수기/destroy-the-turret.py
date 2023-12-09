@@ -30,6 +30,8 @@ def search_strongest():
     max_value = 0
     for i in range(N):
         for j in range(M):
+            if i == ax and j == ay:
+                continue
             if board[i][j] > 0:
                 max_value = max(max_value, board[i][j])
 
@@ -113,6 +115,13 @@ for t in range(1, K + 1):
     attack_status[sx][sy] = True
     search_strongest()
     attack()
+    cnt = 0
+    for i in range(N):
+        for j in range(M):
+            if board[i][j] > 0:
+                cnt += 1
+    if cnt == 1:
+        break
 
 answer = 0
 for i in range(N):
