@@ -69,7 +69,6 @@ def attack():
                 visited[nx][ny] = True
 
     if not is_laser:
-        visited[sx][sy] = True
         board[sx][sy] -= board[ax][ay]
 
         for d in range(8):
@@ -77,11 +76,11 @@ def attack():
             ny = (sy + dy[d]) % M
             if nx == ax and ny == ay:
                 continue
-            visited[nx][ny] = True
-            attack_status[nx][ny] = True
-            board[nx][ny] -= attack_value
-            if board[nx][ny] < 0:
-                board[nx][ny] = 0
+            if board[nx][ny] > 0:
+                attack_status[nx][ny] = True
+                board[nx][ny] -= attack_value
+                if board[nx][ny] < 0:
+                    board[nx][ny] = 0
 
     for i in range(N):
         for j in range(M):
