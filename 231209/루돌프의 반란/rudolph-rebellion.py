@@ -76,7 +76,7 @@ def move_rudolph():
                         number = next_number
                         state[x][y] = 0
                         x, y = nx, ny # 좌표 갱신
-    # TODO : 격자판보고 각 산타들 번호에 따른 좌표 값들 갱신 혹은 필요성 유무 체크하기
+
     santaPos = [(-1, -1)] * (P + 1)
     for i in range(N):
         for j in range(N):
@@ -101,12 +101,15 @@ def move_santa():
             if nx < 0 or nx >= N or ny < 0 or ny >= N or state[nx][ny] != 0:
                 continue
             dist = (nx - r) ** 2 + (ny - c) ** 2
+
             # 산타가 루돌프한테 박는다
             if dist < min_dist:
                 d = k
                 min_dist = dist
+
+        # TODO: 산타가 움직이면서 santaPos에 대한 좌표 값들도 같이 갱신해주어야 한다.
         # 최소 거리가 INF이면 움직이지 않기에 움직인 경우 체크
-        if min_dist != INF:
+        if min_dist != INF and min_dist < (x - r) ** 2 + (y - c) ** 2:
             sx = x + dx[d]
             sy = y + dy[d]
             # sx, sy가 움직여야 하는 곳
@@ -118,21 +121,25 @@ def move_santa():
                 score[number] += D
                 nx = sx + dx[d] * D
                 ny = sy + dy[d] * D
+
                 # 튕겨나가서 격자 밖으로 나가면 끝
                 if nx < 0 or nx >= N or ny < 0 or ny >= N:
                     state[x][y] = 0 # 기존 있는 곳은 0으로 초기화
+                    santaPos[number] = (-1, -1)
                 # 튕겨 나간 곳에 비어있으면 정착
                 elif state[nx][ny] == 0:
                     number = state[x][y]
                     stun[number] = 2
                     state[x][y] = 0
-                    state[sx][sy] = number
+                    state[nx][ny] = number
+                    santaPos[number] = (nx, ny)
                 # 튕겨 나간 곳에 산타가 존재하는 경우
                 else:
                     number = state[x][y]
                     stun[number] = 2  # 스턴 먹음
                     next_number = state[nx][ny]
                     state[nx][ny] = number
+                    santaPos[number] = (nx, ny)
                     number = next_number
                     state[x][y] = 0
                     x, y = nx, ny
@@ -141,31 +148,35 @@ def move_santa():
                         nx = x + dx[d]
                         ny = y + dy[d]
                         if nx < 0 or nx >= N or ny < 0 or ny >= N:
-                            state[x][y] = 0
                             break
                         # 비어있다면 넣어주고 끝
                         if state[nx][ny] == 0:
                             state[nx][ny] = number
+                            santaPos[number] = (nx, ny)
                             break
                         # 다음 움직이는 곳에도 산타가 존재하면 밀어낸다 - 상호작용
                         else:
+                            # if stun[nx][ny] > 0:
+                            #     break
                             next_number = state[nx][ny]
                             state[nx][ny] = number
+                            santaPos[number] = (nx, ny)
                             number = next_number
                             state[x][y] = 0
                             x, y = nx, ny  # 좌표 갱신
 
-            # 산타 움직임
+            # 산타 움직임 - 산타가 있는지 없는지 구분할 필요는 없다. 방향 구할 때 이미 없는 위치를 구했기 때문
             else:
                 number = state[x][y]
                 state[x][y] = 0
+                santaPos[number] = (sx, sy)
                 state[sx][sy] = number
 
-    santaPos = [(-1, -1)] * (P + 1)
-    for i in range(N):
-        for j in range(N):
-            if state[i][j]:
-                santaPos[state[i][j]] = (i, j)
+    # santaPos = [(-1, -1)] * (P + 1)
+    # for i in range(N):
+    #     for j in range(N):
+    #         if state[i][j]:
+    #             santaPos[state[i][j]] = (i, j)
 
 
 def decrease_stun():
