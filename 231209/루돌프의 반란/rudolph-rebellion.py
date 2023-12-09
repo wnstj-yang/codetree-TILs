@@ -118,6 +118,7 @@ def move_santa():
             if sx == r and sy == c:
                 d = (d + 2) % 4  # 반대 방향으로 방향 설정
                 number = state[x][y]
+                # state[x][y] = 0
                 score[number] += D
                 nx = sx + dx[d] * D
                 ny = sy + dy[d] * D
@@ -127,7 +128,7 @@ def move_santa():
                     state[x][y] = 0 # 기존 있는 곳은 0으로 초기화
                     santaPos[number] = (-1, -1)
                 # 튕겨 나간 곳에 비어있으면 정착
-                elif state[nx][ny] == 0:
+                elif state[nx][ny] == 0 or state[nx][ny] == number:
                     number = state[x][y]
                     stun[number] = 2
                     state[x][y] = 0
@@ -207,6 +208,10 @@ for _ in range(P):
 for z in range(M):
     move_rudolph()
     move_santa()
+    # for i in state:
+    #     print(i)
+    # print('-------')
+    # print(santaPos)
     decrease_stun()
     is_out = True
 
