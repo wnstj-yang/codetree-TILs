@@ -43,6 +43,7 @@ def move_rudolph():
         x, y = r, c
         # 충돌이 발생했으므로 격자판을 벗어나는지 확인한다.
         nx, ny = x + dx[d] * C, y + dy[d] * C
+        state[x][y] = 0
         score[number] += C
         if nx < 0 or nx >= N or ny < 0 or ny >= N:
             state[x][y] = 0 # 격자판에서 나감
@@ -50,7 +51,6 @@ def move_rudolph():
         else:
             stun[number] = 2  # 스턴 먹음
             if state[nx][ny] == 0:
-                state[x][y] = 0
                 state[nx][ny] = number
             else:
                 next_number = state[nx][ny]
@@ -63,7 +63,6 @@ def move_rudolph():
                     nx = x + dx[d]
                     ny = y + dy[d]
                     if nx < 0 or nx >= N or ny < 0 or ny >= N:
-                        state[x][y] = 0
                         break
                     # 비어있다면 넣어주고 끝
                     if state[nx][ny] == 0:
@@ -80,7 +79,7 @@ def move_rudolph():
     santaPos = [(-1, -1)] * (P + 1)
     for i in range(N):
         for j in range(N):
-            if state[i][j]:
+            if state[i][j] != 0:
                 santaPos[state[i][j]] = (i, j)
 
 
@@ -157,8 +156,8 @@ def move_santa():
                             break
                         # 다음 움직이는 곳에도 산타가 존재하면 밀어낸다 - 상호작용
                         else:
-                            # if stun[nx][ny] > 0:
-                            #     break
+                            if stun[nx][ny] > 0:
+                                break
                             next_number = state[nx][ny]
                             state[nx][ny] = number
                             santaPos[number] = (nx, ny)
@@ -219,6 +218,8 @@ for z in range(M):
         if santaPos[i] != (-1, -1):
             score[i] += 1
             is_out = False
+
     if is_out:
         break
+    # print(santaPos)
 print(*score[1:])
