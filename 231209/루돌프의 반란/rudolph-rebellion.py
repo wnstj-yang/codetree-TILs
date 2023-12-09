@@ -1,6 +1,6 @@
 # 2023-12-07
 # 20:35 ~ 24:00
-
+# 지이이이인짜 돌아버리겠네
 
 # 1. 가장 가까운 산타 향해 돌진
 # 2. r, c가 가장 큰 산타
@@ -50,7 +50,7 @@ def move_rudolph():
         # 격자판을 벗어나지 않는다면
         else:
             stun[number] = 2  # 스턴 먹음
-            if state[nx][ny] == 0 or state[x][y] == number:
+            if state[nx][ny] == 0:
                 # state[x][y] = 0
                 state[nx][ny] = number
             else:
@@ -102,13 +102,10 @@ def move_santa():
                 continue
             dist = (nx - r) ** 2 + (ny - c) ** 2
 
-            # 산타가 루돌프한테 박는다
             if dist < min_dist:
                 d = k
                 min_dist = dist
 
-        # TODO: 산타가 움직이면서 santaPos에 대한 좌표 값들도 같이 갱신해주어야 한다.
-        # 최소 거리가 INF이면 움직이지 않기에 움직인 경우 체크
         if min_dist != INF and min_dist < (x - r) ** 2 + (y - c) ** 2:
             sx = x + dx[d]
             sy = y + dy[d]
@@ -118,8 +115,8 @@ def move_santa():
             if sx == r and sy == c:
                 d = (d + 2) % 4  # 반대 방향으로 방향 설정
                 number = state[x][y]
-                # state[x][y] = 0
                 score[number] += D
+                # 루돌프에 박고 나서 반대방향으로 D만큼 이동
                 nx = sx + dx[d] * D
                 ny = sy + dy[d] * D
 
@@ -127,8 +124,8 @@ def move_santa():
                 if nx < 0 or nx >= N or ny < 0 or ny >= N:
                     state[x][y] = 0 # 기존 있는 곳은 0으로 초기화
                     santaPos[number] = (-1, -1)
-                # 튕겨 나간 곳에 비어있으면 정착
-                elif state[nx][ny] == 0 or state[nx][ny] == number:
+                # 튕겨 나간 곳에 비어있거나 본인이 있었던 위치로 돌아오면
+                elif state[nx][ny] == 0 or (x == nx and y == ny):
                     number = state[x][y]
                     stun[number] = 2
                     state[x][y] = 0
@@ -157,8 +154,6 @@ def move_santa():
                             break
                         # 다음 움직이는 곳에도 산타가 존재하면 밀어낸다 - 상호작용
                         else:
-                            # if stun[nx][ny] > 0:
-                            #     break
                             next_number = state[nx][ny]
                             state[nx][ny] = number
                             santaPos[number] = (nx, ny)
@@ -182,9 +177,8 @@ def move_santa():
 
 def decrease_stun():
     for i in range(1, len(stun)):
-        stun[i] -= 1
-        if stun[i] < 0:
-            stun[i] = 0
+        if stun[i] > 0:
+            stun[i] -= 1
 
 
 INF = 987654321
