@@ -38,6 +38,8 @@ def search_strongest():
     strong_list = []
     for i in range(N):
         for j in range(M):
+            if i == ax and j == ay:
+                continue
             if board[i][j] == max_value:
                 strong_list.append((attacked[i][j], i + j, i, j))
     strong_list.sort(key=lambda x:(x[0], x[1], x[2]))
