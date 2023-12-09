@@ -173,11 +173,11 @@ def move_santa():
                 santaPos[number] = (sx, sy)
                 state[sx][sy] = number
 
-    # santaPos = [(-1, -1)] * (P + 1)
-    # for i in range(N):
-    #     for j in range(N):
-    #         if state[i][j]:
-    #             santaPos[state[i][j]] = (i, j)
+    santaPos = [(-1, -1)] * (P + 1)
+    for i in range(N):
+        for j in range(N):
+            if state[i][j]:
+                santaPos[state[i][j]] = (i, j)
 
 
 def decrease_stun():
@@ -208,10 +208,6 @@ for _ in range(P):
 for z in range(M):
     move_rudolph()
     move_santa()
-    # for i in state:
-    #     print(i)
-    # print('-------')
-    # print(santaPos)
     decrease_stun()
     is_out = True
 
