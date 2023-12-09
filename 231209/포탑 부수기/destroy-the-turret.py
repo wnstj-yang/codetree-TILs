@@ -83,8 +83,6 @@ def attack():
             if board[nx][ny] > 0:
                 attack_status[nx][ny] = True
                 board[nx][ny] -= attack_value
-                if board[nx][ny] < 0:
-                    board[nx][ny] = 0
 
     for i in range(N):
         for j in range(M):
@@ -113,9 +111,9 @@ for t in range(1, K + 1):
     sx, sy = -1, -1
     search_weakest()
     attacked[ax][ay] = t
+    search_strongest()
     attack_status[ax][ay] = True
     attack_status[sx][sy] = True
-    search_strongest()
     attack()
     cnt = 0
     for i in range(N):
