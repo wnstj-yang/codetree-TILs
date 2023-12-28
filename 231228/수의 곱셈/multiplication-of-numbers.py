@@ -10,7 +10,8 @@ numbers.append(numbers[0] * numbers[1] * numbers[2])
 numbers.sort(reverse=True)
 result = 0
 for num in numbers:
-    result = num
+    result = max(result, num)
     if num % 2:
+        result = num
         break
 print(result)
