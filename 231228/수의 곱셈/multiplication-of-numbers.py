@@ -8,4 +8,9 @@ for i in range(2):
             numbers.append(number)
 numbers.append(numbers[0] * numbers[1] * numbers[2])
 numbers.sort(reverse=True)
-print(numbers[0])
+result = 0
+for num in numbers:
+    result = num
+    if num % 2:
+        break
+print(result)
