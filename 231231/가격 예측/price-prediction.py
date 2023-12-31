@@ -13,7 +13,7 @@ if n > 1:
                 left = w % buy
                 w = (stocks * sell) + left
                 buy = prices[i]
-        else:
+        if sell >= prices[i]:
             stocks = w // buy
             left = w % buy
             w = (stocks * sell) + left
