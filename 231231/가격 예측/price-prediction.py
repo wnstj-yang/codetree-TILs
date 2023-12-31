@@ -8,13 +8,17 @@ if n > 1:
 
         if sell < prices[i] or i == n - 1:
             sell = prices[i]
-            if i == n -1 and buy < sell:
-                stocks = w // buy
-                left = w % buy
-                w = (stocks * sell) + left
+
+            if i == n - 1:
+                if buy < sell:
+                    stocks = w // buy
+                    left = w % buy
+                    w = (stocks * sell) + left
                 break
+        # print(buy, sell, prices[i])
         if sell >= prices[i]:
             if buy != sell:
+
                 stocks = w // buy
                 left = w % buy
                 w = (stocks * sell) + left
