@@ -7,7 +7,7 @@ elif N == 2:
     print(sum(numbers))
 else:
     result = numbers[0] + numbers[-1]
-    for i in range(1, N // 2):
+    for i in range(1, N // 2 - 1):
         calculate = numbers[i] + numbers[-i - 1]
         if calculate > result:
             result = calculate
