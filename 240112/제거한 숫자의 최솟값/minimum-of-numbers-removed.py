@@ -6,8 +6,10 @@ if N == 1:
 elif N == 2:
     print(sum(numbers))
 else:
+    if N % 2 == 1:
+        numbers.pop()
     result = numbers[0] + numbers[-1]
-    for i in range(1, N // 2 - 1):
+    for i in range(1, N // 2):
         calculate = numbers[i] + numbers[-i - 1]
         if calculate > result:
             result = calculate
