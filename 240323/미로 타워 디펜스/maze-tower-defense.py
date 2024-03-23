@@ -42,7 +42,7 @@ def fill_monsters():
                 limit_cnt = 0
                 step += 1
                 if step == N - 1: # 마지막은 3번 진행해야됨
-                    limit_cnt = 3
+                    limit = 3
         if board[nx][ny]:
             monster_list.append(board[nx][ny])
         x, y = nx, ny # 좌표 갱신
@@ -72,7 +72,7 @@ def fill_monsters():
                 limit_cnt = 0
                 step += 1
                 if step == N - 1: # 마지막은 3번 진행해야됨
-                    limit_cnt = 3
+                    limit = 3
         temp[nx][ny] = monster_list[idx]
         idx += 1
         x, y = nx, ny
@@ -107,7 +107,7 @@ def remove_monsters():
                 limit_cnt = 0
                 step += 1
                 if step == N - 1: # 마지막은 3번 진행해야됨
-                    limit_cnt = 3
+                    limit = 3
         if target == board[nx][ny] and board[nx][ny] != 0:
             target_cnt += 1
             target_list.append((nx, ny))
@@ -149,11 +149,12 @@ def fill_pair():
                 limit_cnt = 0
                 step += 1
                 if step == N - 1: # 마지막은 3번 진행해야됨
-                    limit_cnt = 3
+                    limit = 3
         if target == board[nx][ny] and board[nx][ny] != 0:
             target_cnt += 1
         else:
-            fill_list.extend([target_cnt, target])
+            if target != 0:
+                fill_list.extend([target_cnt, target])
             target = board[nx][ny]
             target_cnt = 1
         x, y = nx, ny # 좌표 갱신
@@ -183,7 +184,7 @@ def fill_pair():
                 limit_cnt = 0
                 step += 1
                 if step == N - 1: # 마지막은 3번 진행해야됨
-                    limit_cnt = 3
+                    limit = 3
         temp[nx][ny] = fill_list[idx]
         idx += 1
         x, y = nx, ny
@@ -204,4 +205,5 @@ for _ in range(M):
     while remove_monsters():
         board = fill_monsters()
     board = fill_pair()
+
 print(result)
