@@ -60,7 +60,7 @@ def move_pack():
         nc = c + pdy[d]
         if board[nr][nc]:
             board[nr][nc] = []
-            dead_board[nr][nc] = 2
+            dead_board[nr][nc] = 3
         r, c = nr, nc
 
 
