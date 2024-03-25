@@ -32,7 +32,7 @@ def move_monsters():
 def move_pack():
     global r, c
 
-    max_cnt = 0
+    max_cnt = -1 # 0으로 초기화 시 작은 것을 찾을 수 없기에 -1로 초기화
     max_dirs = []
     for i in range(4):
         for j in range(4):
@@ -44,25 +44,25 @@ def move_pack():
                     nx = x + pdx[z]
                     ny = y + pdy[z]
                     if is_range(nx, ny):
+                        # 갔던 곳에 다시 갈 수 있는 방향이 있을 수 있다
                         if (nx, ny) not in visited:
                             cnt += len(board[nx][ny])
                         visited.append((nx, ny))
                         x, y = nx, ny
                     else:
-                        cnt = -1
+                        cnt = -2 # 범위 벗어난 경우를 -2로 초기화
                         break
-
-                    # x, y = nx, ny
                 if cnt > max_cnt:
                     max_dirs = visited
                     max_cnt = cnt
+
     r, c = max_dirs[-1]
 
     # 격자판에서 시체로 만들었으니 빈 값으로 초기화
     for nr, nc in max_dirs:
         if board[nr][nc]:
             board[nr][nc] = []
-            dead_board[nr][nc] = 3
+            dead_board[nr][nc] = 3 # 현재 진행중인 턴이기 때문에 팩맨 움직인 이후 시체 소멸 과정을 지나야돼서 3으로 초기화
 
 
 # 몬스터 시체 소멸
@@ -101,27 +101,14 @@ for _ in range(M):
 for _ in range(T):
     # 1. 몬스터의 복제 진행
     born_board = [[item[:] for item in monsters] for monsters in board]
-    # print('------- 복제-------------')
-    # for i in born_board:
-    #     print(i)
-
     # 2. 몬스터 이동
     board = move_monsters()
-    # print('-------이동-------------')
-    # for i in board:
-    #     print(i)
     # 3. 팩맨 이동
     move_pack()
     # 4. 시체 소멸
     remove_dead()
     # 5. 몬스터 복제
     born_monsters()
-    # print('-------턴 마무리-------------')
-    # for i in board:
-    #     print(i)
-#
-# for i in board:
-#     print(i)
 
 for i in range(4):
     for j in range(4):
