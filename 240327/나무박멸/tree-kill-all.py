@@ -41,7 +41,7 @@ def spread_trees():
     return next_board
 
 
-# 3-1. 제초제 뿌릴 시 가장 많이 박멸되는 위치 찾기
+# 3-2. 제초제 뿌릴 시 가장 많이 박멸되는 위치 찾기
 def calculate(x, y):
     toxic_list = [(x, y)]
     cnt = 0
@@ -62,6 +62,7 @@ def calculate(x, y):
     return [cnt, toxic_list]
 
 
+# 3-1. 제초제 위치를 찾고 심어주기
 def spread_toxic():
     max_cnt = -1
     max_list = []
