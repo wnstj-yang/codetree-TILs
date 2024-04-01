@@ -71,15 +71,15 @@ def move_catcher(turn):
                     way = True
                     length = 1
                     c_d = 0
-    cnt = 0
+    runner_cnt = 0
     for i in range(3):
         nx = cx + dx[c_d] * i
         ny = cy + dy[c_d] * i
         if is_range(nx, ny) and not trees[nx][ny]:
             if len(board[nx][ny]) > 0:
-                cnt += turn * len(board[nx][ny])
+                runner_cnt += turn * len(board[nx][ny])
                 board[nx][ny] = []
-    return cnt
+    return runner_cnt
 
 
 N, M, H, K = map(int, input().split())
