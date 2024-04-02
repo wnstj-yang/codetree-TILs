@@ -9,88 +9,91 @@ def is_range(x, y):
 
 def move_loser(l):
     x, y, d, s, g = players[l]
+    # 진 플레이어기 때문에 본인이 가지고 있는 총을 내려 놓는다
     if g != 0:
         board[x][y].append(g)
     g = 0
+    players[l][4] = 0
     nd = d
-    is_player = False
-    for k in range(4):
+    for _ in range(4):
+        is_player = False
         nx = x + dx[nd]
         ny = y + dy[nd]
         if not is_range(nx, ny):
             nd = (nd + 1) % 4
             continue
         for z in range(M):
-            if l != z:
+            if z != l:
                 tx, ty = players[z][0], players[z][1]
                 if nx == tx and ny == ty:
                     is_player = True
                     break
-        if not is_player:
-            if board[nx][ny]:
-                max_value = max(board[nx][ny])
-                if g < max_value:
-                    players[l] = [nx, ny, nd, s, max_value]
-                    board[nx][ny].remove(max_value)
-                    if g != 0:
-                        board[nx][ny].append(g)
-            else:
-                players[l] = [nx, ny, nd, s, g]
-            break
-        else:
+        if is_player:
             nd = (nd + 1) % 4
+        else:
+            players[l] = [nx, ny, nd, s, 0]
+            break
+    if board[nx][ny]:
+        max_value = max(board[nx][ny])
 
+        if g < max_value:
+            players[l][-1] = max_value
+            board[nx][ny].remove(max_value)
+            if g != 0:
+                board[nx][ny].append(g)
 
+# n은 지금 이동하는 플레이어, t는 같은 위치에 있는 플레이어 들의 인덱스
 def fight(n, t):
     x, y, d, s, g = players[n]
     tx, ty, td, ts, tg = players[t]
     source = s + g
     target = ts + tg
-    win, lost = n, t
-    if source < target:
-        win, lost = t, n
-    elif source == target:
+    win, lost = n, t # 이긴 플레이어, 지는 플레이어 미리 설정
+    # 초기 능력치와 총의 합이 둘 다 같은 경우
+    if source == target:
+        # target이 되는 플레이어의 초기 능력치가 큰 경우 인덱스 뒤바꿈
         if s < ts:
             win, lost = t, n
-    move_loser(lost)
-    wx, wy, wd, ws, wg = players[win]
-    if board[wx][wy]:
-        max_value = max(board[wx][wy])
-        if wg < max_value:
-            players[win] = [wx, wy, wd, ws, max_value]
-            board[wx][wy].remove(max_value)
-            if wg != 0:
-                board[wx][wy].append(wg)
-    else:
-        players[win] = [wx, wy, wd, ws, wg]
+    # 같은 위치에 있는 값이 더 큰 경우 인덱스 뒤바꿈
+    elif source < target:
+        win, lost = t, n
     result[win] += abs(source - target)
+
+    move_loser(lost) # 진플레이어 먼저 이동
+    x, y, d, s, g = players[win]
+    if board[x][y]:
+        max_value = max(board[x][y])
+        if g < max_value:
+            players[win][-1] = max_value
+            board[x][y].remove(max_value)
+            if g != 0:
+                board[x][y].append(g)
 
 
 def move_player(index):
     x, y, d, s, g = players[index]
     nx = x + dx[d]
     ny = y + dy[d]
-
-    is_player = False
+    # 범위를 벗어나지 않을 경우 방향 반대로 전환 후 이동
     if not is_range(nx, ny):
         d = (d + 2) % 4
         nx = x + dx[d]
         ny = y + dy[d]
+    players[index][0], players[index][1], players[index][2] = nx, ny, d # 현재 플레이어 좌표 및 방향 갱신
+    is_player = False
     for i in range(M):
         if i != index:
             tx, ty = players[i][0], players[i][1]
             if tx == nx and ty == ny:
                 is_player = True
-                players[index][0], players[index][1], players[index][2] = nx, ny, d
-                fight(index, i)
-                break
+                fight(index, i) # index: 이동하는 플레이어 / i : 이동한 곳에 있는 플레이어
+                break # break를 빼면.?
 
     if not is_player:
-        players[index] = [nx, ny, d, s, g]
         if board[nx][ny]:
             max_value = max(board[nx][ny])
             if g < max_value:
-                players[index] = [nx, ny, d, s, max_value]
+                players[index][4] = max_value
                 board[nx][ny].remove(max_value)
                 if g != 0:
                     board[nx][ny].append(g)
@@ -115,5 +118,9 @@ for i in range(M):
 for _ in range(K):
     for i in range(M):
         move_player(i)
-
+# for i in board:
+#     print(i)
+# print('-----------')
+# for i in players:
+#     print(i)
 print(*result)
