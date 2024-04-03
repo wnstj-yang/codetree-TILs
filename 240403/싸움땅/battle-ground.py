@@ -16,7 +16,7 @@ def move_loser(l):
     players[l][4] = 0
     nd = d
     for _ in range(4):
-        is_player = False
+        is_player = False # 순회하면서 초기화해주지 않으면 플레이어가 있다고 보는 상태에서 다음 방향에 비어있다고 해도 방향 전환만 다시 하게 됨
         nx = x + dx[nd]
         ny = y + dy[nd]
         if not is_range(nx, ny):
@@ -41,6 +41,7 @@ def move_loser(l):
             board[nx][ny].remove(max_value)
             if g != 0:
                 board[nx][ny].append(g)
+
 
 # n은 지금 이동하는 플레이어, t는 같은 위치에 있는 플레이어 들의 인덱스
 def fight(n, t):
@@ -87,7 +88,7 @@ def move_player(index):
             if tx == nx and ty == ny:
                 is_player = True
                 fight(index, i) # index: 이동하는 플레이어 / i : 이동한 곳에 있는 플레이어
-                break # break를 빼면.?
+                break
 
     if not is_player:
         if board[nx][ny]:
@@ -118,9 +119,5 @@ for i in range(M):
 for _ in range(K):
     for i in range(M):
         move_player(i)
-# for i in board:
-#     print(i)
-# print('-----------')
-# for i in players:
-#     print(i)
+
 print(*result)
