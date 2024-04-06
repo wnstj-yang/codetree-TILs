@@ -118,7 +118,13 @@ for i in range(1, K + 1):
     attack()
     check_breaked()
     repair()
-
+    cnt = 0
+    for x in range(N):
+        for y in range(M):
+            if board[x][y] > 0:
+                cnt += 1
+    if cnt == 1:
+        break
 
 for i in board:
     total = max(total, max(i))
