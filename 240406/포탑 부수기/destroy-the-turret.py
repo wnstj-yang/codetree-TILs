@@ -3,13 +3,6 @@
 from collections import deque
 
 
-# 공통
-def is_range(x, y):
-    if x < 0 or x >= N or y < 0 or y >= M:
-        return False
-    return True
-
-
 # 1. 공격자 선정
 def select_attacker():
     weakest = 987654321
@@ -22,36 +15,41 @@ def select_attacker():
         for y in range(M):
             if board[x][y] == weakest:
                 weak_list.append((visited[x][y], x + y, x, y))
-    if len(weak_list) > 1:
-        weak_list.sort(key=lambda x: (-x[0], -x[1], -x[3]))
+
+    weak_list.sort(key=lambda x: (-x[0], -x[1], -x[3]))
     x, y = weak_list[0][2], weak_list[0][3]
     board[x][y] += (N + M)
     return x, y
 
+
 # 2. 공격자의 공격
-def select_attack():
+def select_target():
     strongest = 0
     for x in range(N):
         for y in range(M):
-            if board[x][y] > 0 and board[x][y] > strongest:
+            if x == wx and y == wy:
+                continue
+            if board[x][y] > 0 and strongest < board[x][y]:
                 strongest = board[x][y]
     strong_list = []
     for x in range(N):
         for y in range(M):
+            if x == wx and y == wy:
+                continue
             if board[x][y] == strongest:
                 strong_list.append((visited[x][y], x + y, x, y))
-    if len(strong_list) > 1:
-        strong_list.sort(key=lambda x: (x[0], -x[1], -x[3]))
+
+    strong_list.sort(key=lambda x: (x[0], x[1], x[3]))
     x, y = strong_list[0][2], strong_list[0][3]
 
     return x, y
 
 # 2-1. 레이저 공격
-def attack(x, y):
+def attack():
     q = deque()
-    q.append((x, y, []))
+    q.append((wx, wy, []))
     attack_visited = [[False] * M for _ in range(N)]
-    attack_visited[x][y] = True
+    attack_visited[wx][wy] = True
     half = board[wx][wy] // 2
     full = board[wx][wy]
     laser_result = []
@@ -64,20 +62,25 @@ def attack(x, y):
         for i in range(4):
             nx = (x + dx[i]) % N
             ny = (y + dy[i]) % M
-            if board[nx][ny] > 0:
+            if board[nx][ny] > 0 and not attack_visited[nx][ny]:
                 attack_visited[nx][ny] = True
                 q.append((nx, ny, coors + [(nx, ny)]))
+
     if laser_result:
-        for x, y in coors[:-1]:
-            board[x][y] -= half
+        for x, y in coors:
+            if x == ax and y == ay:
+                board[x][y] -= full
+            else:
+                board[x][y] -= half
             affected[x][y] = True
-        board[ax][ay] -= full
     else:
         board[ax][ay] -= full
         for i in range(8):
             nx = (ax + dx[i]) % N
             ny = (ay + dy[i]) % M
-            if board[nx][ny] > 0 and (nx != wx and ny != wy):
+            if nx == wx and ny == wy:
+                continue
+            if board[nx][ny] > 0:
                 board[nx][ny] -= half
                 affected[nx][ny] = True
 
@@ -107,14 +110,15 @@ dy = [1, 0, -1, 0, -1, 1, 1, -1]
 total = 0
 for i in range(1, K + 1):
     wx, wy = select_attacker()  # 가장 약한 포탑
-    ax, ay = select_attack()  # 가장 강한 포탑
+    ax, ay = select_target()  # 가장 강한 포탑
     affected = [[False] * M for _ in range(N)]
     affected[wx][wy] = True
     affected[ax][ay] = True
     visited[wx][wy] = i
-    attack(wx, wy)
+    attack()
     check_breaked()
     repair()
+
 
 for i in board:
     total = max(total, max(i))
