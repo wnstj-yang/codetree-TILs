@@ -23,7 +23,7 @@ def select_attacker():
             if board[x][y] == weakest:
                 weak_list.append((visited[x][y], x + y, x, y))
     if len(weak_list) > 1:
-        weak_list.sort(key=lambda x: (x[0], -x[1], -x[3]))
+        weak_list.sort(key=lambda x: (-x[0], -x[1], -x[3]))
     x, y = weak_list[0][2], weak_list[0][3]
     board[x][y] += (N + M)
     return x, y
@@ -115,9 +115,6 @@ for i in range(1, K + 1):
     attack(wx, wy)
     check_breaked()
     repair()
-    # for z in board:
-    #     print(z)
-    # print('------------')
 
 for i in board:
     total = max(total, max(i))
