@@ -10,6 +10,7 @@ def is_range(x, y):
 # 기사 움직이기
 def check_knight(check_list, d):
     candidates = set()
+    # print(knights)
     for k in check_list:
         for x, y in knights[k][1]:
             nx = x + dx[d]
@@ -83,6 +84,8 @@ for i in range(1, Q + 1):
     num, d = map(int, input().split())
     move_check = [num]
     # print('before knights', knights)
+    if not knights:
+        continue
     while True:
         result = check_knight(move_check, d)
         if result:
@@ -96,6 +99,7 @@ for i in range(1, Q + 1):
 
     knight_board = move_knights(move_check, d)
     damage_knights(move_check, i)
+    # print(knights)
     # print('after knights', knights)
 
 # print(knights)
