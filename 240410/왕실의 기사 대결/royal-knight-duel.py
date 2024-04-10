@@ -19,7 +19,7 @@ def check_knight(check_list, d):
                 if board[nx][ny] == 2:
                     return [-1]
                 # move_list에서 이미 후보인 k가 같은 영역이므로 포함시키지 않는다.
-                if knight_board[nx][ny] not in check_list and knight_board[nx][ny] != 0:
+                if knight_board[nx][ny] != k and knight_board[nx][ny] != 0:
                     candidates.add(knight_board[nx][ny])
             else:
                 return [-1]
