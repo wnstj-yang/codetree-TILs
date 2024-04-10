@@ -19,7 +19,7 @@ def check_knight(check_list, d):
                 if board[nx][ny] == 2:
                     return [-1]
                 # move_list에서 이미 후보인 k가 같은 영역이므로 포함시키지 않는다.
-                if knight_board[nx][ny] != 0:
+                if knight_board[nx][ny] != k and knight_board[nx][ny] != 0:
                     candidates.add(knight_board[nx][ny])
             else:
                 return [-1]
@@ -82,12 +82,13 @@ for i in range(1, N + 1):
             knights[i][1].append((x, y))
 for i in range(1, Q + 1):
     num, d = map(int, input().split())
-    move_check = [num]
+    move_check = []
     # print('before knights', knights)
+    result = [num]
     if not knights:
         continue
     while True:
-        result = check_knight(move_check, d)
+        result = check_knight(result, d)
         if result:
             if result[0] == -1:
                 move_check = []
