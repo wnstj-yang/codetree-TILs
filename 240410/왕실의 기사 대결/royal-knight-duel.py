@@ -10,7 +10,6 @@ def is_range(x, y):
 # 기사 움직이기
 def check_knight(check_list, d):
     candidates = set()
-    # print(knights)
     for k in check_list:
         for x, y in knights[k][1]:
             nx = x + dx[d]
@@ -35,11 +34,14 @@ def move_knights(move_list, d):
             ny = y + dy[d]
             next_list.append((nx, ny))
         knights[k][1] = next_list
-
+    next_board = [[0] * L for _ in range(L)]
+    for k, coors in knights.items():
+        for x, y in coors[1]:
+            next_board[x][y] = k
+    return next_board
 
 
 def damage_knights(damage_list, knight):
-    # print(damage_list)
     for k in damage_list:
         cnt = 0
         if k == knight:
@@ -50,16 +52,10 @@ def damage_knights(damage_list, knight):
         knights[k][0] -= cnt
         damaged[k] += cnt
         if knights[k][0] <= 0:
-            # for x, y in knights[k][1]:
-            #     knight_board[x][y] = 0
+            for x, y in knights[k][1]:
+                knight_board[x][y] = 0
             del knights[k]
             del damaged[k]
-    next_board = [[0] * L for _ in range(L)]
-    # print(knights)
-    for k, coors in knights.items():
-        for x, y in coors[1]:
-            next_board[x][y] = k
-    return next_board
 
 
 L, N, Q = map(int, input().split())
@@ -85,13 +81,11 @@ for i in range(1, N + 1):
 for i in range(1, Q + 1):
     num, d = map(int, input().split())
     move_check = [num]
-    # print('before knights', knights)
     result = [num]
     if num not in knights:
         continue
     while True:
         result = check_knight(result, d)
-        # print('result', result)
         if result:
             if result[0] == -1:
                 move_check = []
@@ -100,19 +94,7 @@ for i in range(1, Q + 1):
                 move_check.extend(result)
         else:
             break
-    # print(move_check)
-    # if move_check:
-    # move_check.append(num)
-    move_knights(move_check, d)
-    knight_board = damage_knights(move_check, num)
-    # knight_board = move_knights(move_check, d)
-    # print(knights)
-    # print('after knights', knights)
+    knight_board = move_knights(move_check, d)
+    damage_knights(move_check, num)
 
-# print(knights)
-# print(damaged)
-# for i in knight_board:
-#     print(i)
-# print(knights)
-# print(damaged.values())
 print(sum(damaged.values()))
