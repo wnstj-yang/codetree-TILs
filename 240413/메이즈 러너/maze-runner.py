@@ -17,7 +17,6 @@ def move():
         for y in range(N):
             if players[x][y]:
                 min_dist = abs(x - ex) + abs(y - ey)
-                # is_moved = False
                 for p in players[x][y]:
                     is_moved = False
                     for d in range(4):
@@ -36,8 +35,8 @@ def move():
                                 is_moved = True
                                 next_players[nx][ny].append(p)
                                 break
-                if not is_moved:
-                    next_players[x][y].append(p)
+                    if not is_moved:
+                        next_players[x][y].append(p)
     return next_players
 
 
