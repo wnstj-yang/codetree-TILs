@@ -210,6 +210,7 @@ for z in range(M):
             score[i] += 1
             is_out = False
 
-
+    if is_out:
+        break
 
 print(*score[1:])
