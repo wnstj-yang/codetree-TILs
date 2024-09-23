@@ -24,7 +24,9 @@ def get_groups(x, y):
     return coors
             
 
+# 조화로움을 구할 수 있도록 진행
 def calculate(group_1, group_2):
+    # 그룹 1을 기준으로해서 그룹 2와 경계를 구한다
     criteria = board[group_1[0][0]][group_1[0][1]]
     target = board[group_2[0][0]][group_2[0][1]]
     border_cnt = 0
@@ -33,10 +35,10 @@ def calculate(group_1, group_2):
             nx = x + dx[i]
             ny = y + dy[i]
             if nx < 0 or nx >= N or ny < 0 or ny >= N:
-                continue 
+                continue
+            # 경계선 바깥이 목표로하는 값이 같은지와 이 좌표가 group_2에 해당하는지 체크한다
             if board[nx][ny] == target and (nx, ny) in group_2:
                 border_cnt += 1
-    # print((len(group_1) + len(group_2)) * criteria * target * border_cnt)
     return (len(group_1) + len(group_2)) * criteria * target * border_cnt
     
 def rotate():
@@ -80,19 +82,15 @@ total = 0 # 조화로움 총합
 # 3회전까지 진행
 for _ in range(4):
     visited = [[False] * N for _ in range(N)]
-    groups = []
+    groups = [] # 그룹이 되는 좌표들 집합
     for i in range(N):
         for j in range(N):
             if not visited[i][j]:
                 groups.append(get_groups(i, j))
+    # 그룹들을 조합 형태로 2가지를 구하여 각 조화로움을 구한다
     for i in range(len(groups) - 1):
         for j in range(i + 1, len(groups)):
             total += calculate(groups[i], groups[j])
-    # print(total)
-    # for z in board:
-    #     print(z)
-    # print('after')
+    # 회전
     board = rotate()
-    # for i in board:
-    #     print(i)
 print(total)
