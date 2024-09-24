@@ -3,28 +3,27 @@ def move_runners():
     new_board = [[[] for _ in range(N)] for _ in range(N)]
     for x in range(N):
         for y in range(N):
-            distance = abs(x - cx) + abs(y - cy)
             # 도망자가 존재하고 술래와의 거리가 3이하일 때만 움직인다.
-            if distance <= 3:
-                if len(board[x][y]) > 0:
-                    for d in board[x][y]:
-                        nd = d
+            if len(board[x][y]) > 0:
+                distance = abs(x - cx) + abs(y - cy)
+                for d in board[x][y]:
+                    if distance > 3:
+                        new_board[x][y].append(d)
+                        continue
+                    nd = d
+                    nx = x + dx[nd]
+                    ny = y + dy[nd]
+                    
+                    if nx < 0 or nx >= N or ny < 0 or ny >= N:
+                        nd = (nd + 2) % 4
                         nx = x + dx[nd]
                         ny = y + dy[nd]
-                        
-                        if nx < 0 or nx >= N or ny < 0 or ny >= N:
-                            nd = (nd + 2) % 4
-                            nx = x + dx[nd]
-                            ny = y + dy[nd]
-                        # 범위를 벗어나서 방향전환 후 한 칸 이동했을 때나 그냥 이동했을 때
-                        # 움직이려는 칸에 술래가 있으면 기존 현재 위치에 방향 추가
-                        if nx == cx and ny == cy:
-                            new_board[x][y].append(nd)
-                        else:
-                            new_board[nx][ny].append(nd)
-            else:
-                if len(board[x][y]) > 0:
-                    new_board[x][y] = board[x][y]
+                    # 범위를 벗어나서 방향전환 후 한 칸 이동했을 때나 그냥 이동했을 때
+                    # 움직이려는 칸에 술래가 있으면 기존 현재 위치에 방향 추가
+                    if nx == cx and ny == cy:
+                        new_board[x][y].append(nd)
+                    else:
+                        new_board[nx][ny].append(nd)
     return new_board
 
 
@@ -86,15 +85,16 @@ def move_catcher():
                         cd = 0
                         length = 1
     cx, cy = nx, ny
+    # print(cx, cy)
     for i in range(3):
-        nx = cx + dx[cd] * i
-        ny = cy + dy[cd] * i
+        tx = cx + dx[cd] * i
+        ty = cy + dy[cd] * i
         
-        if nx < 0 or nx >= N or ny < 0 or ny >= N:
+        if tx < 0 or tx >= N or ty < 0 or ty >= N:
             break
-        if not trees[nx][ny] and len(board[nx][ny]) > 0:
-            runner_cnt += len(board[nx][ny])
-            board[nx][ny] = []
+        if not trees[tx][ty] and len(board[tx][ty]) > 0:
+            runner_cnt += len(board[tx][ty])
+            board[tx][ty] = []
     return runner_cnt
 
 
