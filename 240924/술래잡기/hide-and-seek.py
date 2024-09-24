@@ -121,11 +121,11 @@ for k in range(1, K + 1):
     # 1. 도망자 움직임
     board = move_runners()
     check_runners = 0
-    for i in range(N):
-        for j in range(N):
-            check_runners += len(board[i][j])
-    if check_runners == 0:
-        break
+    # for i in range(N):
+    #     for j in range(N):
+    #         check_runners += len(board[i][j])
+    # if check_runners == 0:
+    #     break
     # 2. 술래 움직임
     catched_runners = move_catcher()
     total += (catched_runners * k)
