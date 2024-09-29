@@ -80,10 +80,10 @@ def spread_toxic():
     for x, y in toxic_coors:
         board[x][y] = 0
         toxic_board[x][y] = C + 1 # 감소 수를 남아있는 년수에서 + 1을 통해 계산
-    print('제초제 뿌린 이후 ')
-    for z in board:
-        print(z)
-    print()
+    # print('제초제 뿌린 이후 ')
+    # for z in board:
+    #     print(z)
+    # print()
     
 
 def decrease_toxic():
@@ -91,10 +91,10 @@ def decrease_toxic():
         for y in range(N):
             if toxic_board[x][y] > 0:
                 toxic_board[x][y] -= 1
-    print('회차 이후 감소')
-    for i in toxic_board:
-        print(i)
-    print('tocix')
+    # print('회차 이후 감소')
+    # for i in toxic_board:
+    #     print(i)
+    # print('tocix')
 
 
 N, M, K, C = map(int, input().split())
@@ -110,13 +110,13 @@ total = 0 # 총 박멸한 나무 그루 수
 
 for _ in range(M):
     grow_trees()
-    for i in board:
-        print(i)
-    print()
+    # for i in board:
+    #     print(i)
+    # print()
     spread_trees()
-    for i in board:
-        print(i)
-    print()
+    # for i in board:
+    #     print(i)
+    # print()
     spread_toxic()
     decrease_toxic()
 print(total)
