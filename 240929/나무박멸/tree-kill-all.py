@@ -12,7 +12,6 @@ def grow_trees():
     for x in range(N):
         for y in range(N):
             if board[x][y] > 0:
-                # cnt = 0
                 for k in range(4):
                     nx = x + dx[k]
                     ny = y + dy[k]
@@ -25,7 +24,7 @@ def spread_trees():
     add_tree_board = [[0] * N for _ in range(N)]
     for x in range(N):
         for y in range(N):
-            if board[x][y] > 0 and toxic_board[x][y] == 0:
+            if board[x][y] > 0:
                 directions = []
                 for k in range(4):
                     nx = x + dx[k]
@@ -55,18 +54,17 @@ def spread_toxic():
     toxic_coors = []
     for x in range(N):
         for y in range(N):
-            if board[x][y] > 0 and toxic_board[x][y] == 0:
+            if board[x][y] > 0:
                 cnt = board[x][y]
                 coors = [(x, y)]
                 for d in range(4):
                     for k in range(1, K + 1):    
                         nx = x + cx[d] * k
                         ny = y + cy[d] * k
-                        if is_out_range(nx, ny):
+                        if is_out_range(nx, ny) or board[nx][ny] == -1:
                             break
-                        if board[nx][ny] == -1:
-                            break
-                        if board[nx][ny] >= 0 and toxic_board[nx][ny] == 0:
+                        # 제초제를 뿌릴 때 조건으로 제초제가 있는 곳을 하면 안된다. 중첩되는 경우도 포함이기 때문
+                        if board[nx][ny] >= 0:
                             cnt += board[nx][ny]
                             coors.append((nx, ny))
                             if board[nx][ny] == 0:
