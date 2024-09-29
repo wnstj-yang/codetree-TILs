@@ -110,7 +110,6 @@ cy = [-1, 1, 1, -1]
 total = 0 # 총 박멸한 나무 그루 수
 
 for _ in range(M):
-    decrease_toxic()
     grow_trees()
     # for i in board:
     #     print(i)
@@ -120,4 +119,5 @@ for _ in range(M):
     #     print(i)
     # print()
     spread_toxic()
+    decrease_toxic()
 print(total)
