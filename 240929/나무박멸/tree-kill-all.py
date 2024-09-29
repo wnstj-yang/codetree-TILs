@@ -64,7 +64,7 @@ def spread_toxic():
                         nx = x + cx[d] * k
                         ny = y + cy[d] * k
                         if is_out_range(nx, ny):
-                            continue
+                            break
                         if board[nx][ny] == -1:
                             break
                         if board[nx][ny] >= 0 and toxic_board[nx][ny] == 0:
