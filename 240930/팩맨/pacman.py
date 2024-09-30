@@ -23,12 +23,12 @@ def move_monsters():
                     nd = (nd + k) % 8
                     nx = x + dx[nd]
                     ny = y + dy[nd]
-                    if not is_range(nx, ny) or (nx == px and ny == py) or dead_count[nx][ny] > 0:
+                    if is_range(nx, ny) and (nx != px or ny != py) and dead_count[nx][ny] == 0:
                         # d = (d + 1) % 8
-                        continue
-                    new_board[nx][ny].append(nd)
-                    is_done = True
-                    break
+                        # continue
+                        new_board[nx][ny].append(nd)
+                        is_done = True
+                        break
                 if not is_done:
                     new_board[nx][ny].append(d)
     return new_board
