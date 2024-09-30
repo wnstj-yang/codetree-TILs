@@ -20,7 +20,7 @@ def move_monsters():
                 is_done = False
                 nd = d
                 for k in range(8):
-                    nd = (d + k) % 8
+                    nd = (nd + k) % 8
                     nx = x + dx[nd]
                     ny = y + dy[nd]
                     if not is_range(nx, ny) or (nx == px and ny == py) or dead_count[nx][ny] > 0:
@@ -52,7 +52,7 @@ def move_pacman():
                         x, y = nx, ny
                         visited.append((nx, ny))
                     else:
-                        cnt = -2
+                        cnt = -1
                         break
 
                 if cnt > max_cnt:
