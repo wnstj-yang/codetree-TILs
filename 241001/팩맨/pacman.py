@@ -34,8 +34,8 @@ def move_monsters():
 def move_pacman():
     global px, py
 
-    max_cnt = -1 # 0으로 초기화하면 찾아나설 수가 없다.
-    max_coors = []
+    max_cnt = 0 
+    max_coors = [0, 0, 0]
     for d1 in range(4):
         for d2 in range(4):
             for d3 in range(4):
