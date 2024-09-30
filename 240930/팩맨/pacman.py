@@ -18,13 +18,15 @@ def move_monsters():
         for y in range(4):
             for d in board[x][y]:
                 is_done = False
+                nd = d
                 for k in range(8):
-                    nx = x + dx[d]
-                    ny = y + dy[d]
+                    nd = (d + k) % 8
+                    nx = x + dx[nd]
+                    ny = y + dy[nd]
                     if not is_range(nx, ny) or (nx == px and ny == py) or dead_count[nx][ny] > 0:
-                        d = (d + 1) % 8
+                        # d = (d + 1) % 8
                         continue
-                    new_board[nx][ny].append(d)
+                    new_board[nx][ny].append(nd)
                     is_done = True
                     break
                 if not is_done:
@@ -41,14 +43,17 @@ def move_pacman():
             for d3 in range(4):
                 x, y = px, py
                 cnt = 0
-                visited = [(x, y)]
+                visited = []
                 for d in [d1, d2, d3]:
                     nx = x + p_dx[d]
                     ny = y + p_dy[d]
                     if is_range(nx, ny) and (nx, ny) not in visited:
                         cnt += len(board[nx][ny])
-                        visited.append((nx, ny))
                         x, y = nx, ny
+                        visited.append((nx, ny))
+                    else:
+                        cnt = -1
+                        break
 
                 if cnt > max_cnt:
                     max_cnt = cnt
