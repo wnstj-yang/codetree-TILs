@@ -7,8 +7,8 @@ def is_range(x, y):
 def replicate():
     for x in range(4):
         for y in range(4):
-            for d in board[x][y]:
-                monster_egg[x][y].append(d)
+            if len(board[x][y]) > 0:
+                monster_egg[x][y] = board[x][y]
 
 
 # 격자를 벗어나면 반시계 방향으로 45도 회전 - 가능할때까지 움직임 가능하면 움직임
@@ -20,15 +20,15 @@ def move_monsters():
                 is_done = False
                 nd = d
                 for k in range(8):
-                    nd = (nd + k) % 8
+                    nd = (d + k) % 8
                     nx = x + dx[nd]
                     ny = y + dy[nd]
-                    if is_range(nx, ny) and (nx != px or ny != py) and dead_count[nx][ny] == 0:
+                    if not is_range(nx, ny) or (nx == px and ny == py) or dead_count[nx][ny] > 0:
                         # d = (d + 1) % 8
-                        # continue
-                        new_board[nx][ny].append(nd)
-                        is_done = True
-                        break
+                        continue
+                    new_board[nx][ny].append(nd)
+                    is_done = True
+                    break
                 if not is_done:
                     new_board[nx][ny].append(d)
     return new_board
@@ -47,8 +47,9 @@ def move_pacman():
                 for d in [d1, d2, d3]:
                     nx = x + p_dx[d]
                     ny = y + p_dy[d]
-                    if is_range(nx, ny) and (nx, ny) not in visited:
-                        cnt += len(board[nx][ny])
+                    if is_range(nx, ny):
+                        if (nx, ny) not in visited:
+                            cnt += len(board[nx][ny])
                         x, y = nx, ny
                         visited.append((nx, ny))
                     else:
