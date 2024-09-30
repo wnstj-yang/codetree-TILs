@@ -24,8 +24,6 @@ def move_monsters():
                     nx = x + dx[nd]
                     ny = y + dy[nd]
                     if is_range(nx, ny) and (nx != px or ny != py) and dead_count[nx][ny] == 0:
-                        # d = (d + 1) % 8
-                        # continue
                         new_board[nx][ny].append(nd)
                         is_done = True
                         break
@@ -36,7 +34,7 @@ def move_monsters():
 def move_pacman():
     global px, py
 
-    max_cnt = -1
+    max_cnt = -1 # 0으로 초기화하면 찾아나설 수가 없다.
     max_coors = []
     for d1 in range(4):
         for d2 in range(4):
@@ -53,7 +51,7 @@ def move_pacman():
                         x, y = nx, ny
                         visited.append((nx, ny))
                     else:
-                        cnt = -2
+                        cnt = -1
                         break
 
                 if cnt > max_cnt:
@@ -63,6 +61,7 @@ def move_pacman():
     for d in max_coors:
         px = px + p_dx[d]
         py = py + p_dy[d]
+        # 몬스터가 존재할 때만 해줘야한다.
         if board[px][py]:
             board[px][py] = []
             dead_count[px][py] = 3 # 현재 돌고 있는 턴에 소멸을 하므로 2턴 유지를 위해 3으로 설정
@@ -102,26 +101,10 @@ for _ in range(M):
 for _ in range(T):
     monster_egg = [[[] for _ in range(4)] for _ in range(4)]
     replicate()
-    # for i in board:
-    #     print(i)
-    # print('------------')
     board = move_monsters()
-    # for i in board:
-    #     print(i)
-    # print()
     move_pacman()
-    # for i in board:
-    #     print(i)
-    # print('----------팩맨먹음--')
-    # for i in monster_egg:
-    #     print(i)
-    # print('-------복제--------')
     born_monster()
     decrease_dead_count()
-
-# for i in board:
-#     print(i)
-# print('----------마지막결과--')
 
 for x in range(4):
     for y in range(4):
