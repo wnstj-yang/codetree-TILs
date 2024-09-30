@@ -52,7 +52,7 @@ def move_pacman():
                         x, y = nx, ny
                         visited.append((nx, ny))
                     else:
-                        cnt = -1
+                        cnt = -2
                         break
 
                 if cnt > max_cnt:
