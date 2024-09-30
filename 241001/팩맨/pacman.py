@@ -36,7 +36,7 @@ def move_monsters():
 def move_pacman():
     global px, py
 
-    max_cnt = 0
+    max_cnt = -1
     max_coors = []
     for d1 in range(4):
         for d2 in range(4):
@@ -53,7 +53,7 @@ def move_pacman():
                         x, y = nx, ny
                         visited.append((nx, ny))
                     else:
-                        cnt = -1
+                        cnt = -2
                         break
 
                 if cnt > max_cnt:
