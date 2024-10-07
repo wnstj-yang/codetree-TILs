@@ -33,7 +33,7 @@ def move_person(sx, sy, num):
 
     tx, ty = people_target_coors[num]
     min_dist = 987654321
-    min_d = 0
+    min_d = -1
     for d in range(4):
         # 방향에 따라 최단거리 측정하기
         visited = [[False] * N for _ in range(N)]
@@ -54,14 +54,18 @@ def move_person(sx, sy, num):
             for i in range(4):
                 nx = x + dx[i]
                 ny = y + dy[i]
-                if is_range(nx, ny) and visited[nx][ny] == 0 and board[nx][ny] < 2:
+                if is_range(nx, ny) and not visited[nx][ny] and board[nx][ny] < 2:
                     visited[nx][ny] = True
                     q.append((nx, ny, cnt + 1))
+    if min_d == -1:
+        return
     ax, ay = sx + dx[min_d], sy + dy[min_d]
-    if ax == tx and ay == tx:
+    # print(ax, ay, tx, ty, people_target_coors)
+    if ax == tx and ay == ty:
+        # print('arrived', arrived)
         arrived += 1
         # people_target_coors[num] = [-1, -1]
-    people[num] = [sx + dx[min_d], sy + dy[min_d]]
+    people[num] = [ax, ay]
 
 
 N, M = map(int, input().split())
@@ -85,25 +89,31 @@ while True:
             if i not in people:
                 # 문제에서의 3번 수행
                 sx, sy = people_target_coors[i]
-                people[i] = [sx, sy]
                 x, y = find_min_distance(sx, sy)
+                people[i] = [x, y]
                 no_move_coors.append((x, y))
             else:
                 sx, sy = people[i]
                 move_person(sx, sy, i)
-                if people[i] == people_target_coors[i]:
+                rx, ry = people[i]
+                if people[i] == people_target_coors[i] and board[rx][ry] < 2:
                     no_move_coors.append((people[i][0], people[i][1]))
     else:
         # 순서대로 시작
         for i in range(M):
             sx, sy = people[i]
             move_person(sx, sy, i)
-            if people[i] == people_target_coors[i]:
+            rx, ry = people[i]
+            if people[i] == people_target_coors[i] and board[rx][ry] < 2:
                 no_move_coors.append((people[i][0], people[i][1]))
     # 1분씩 돌면서 편의점에 도착하거나 베이스 캠프에 가는 등의 좌표들을 통해 못가도록 설정
     for x, y in no_move_coors:
         board[x][y] = 2
+    arrive_time += 1
+    # for z in board:
+    #     print(z)
+    # print(people, 'zzz', no_move_coors)
+    # print(arrived)
     if arrived == M:
         print(arrive_time)
         break
-    arrive_time += 1
