@@ -1,7 +1,5 @@
 from collections import deque
 
-
-
 # 1. 공격자 선정 - 가장 약한 포탑(공격력이 가장 낮은 포탑)을 찾는다
 def find_attacker(time):
     min_val = 987654321
@@ -124,16 +122,9 @@ for t in range(1, K + 1):
         break
     related_attack = [[False] * M for _ in range(N)]
     ax, ay = find_attacker(t)
-    # print(ax, ay, board[ax][ay])
     attack(ax, ay, t)
-    # for z in board:
-    #     print(z)
-    # print('---')
     broke_turret()
     repair_turret()
-    # for z in board:
-    #     print(z)
-    # print('---')
 max_result = 0
 for l in board:
     max_result = max(max_result, max(l))
