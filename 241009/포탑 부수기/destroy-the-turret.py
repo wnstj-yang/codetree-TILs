@@ -39,7 +39,7 @@ def attack(ax, ay, time):
     # 2.2. 강한 포탑의 좌표들과 최근 공격한 시간, 행과 열 합, 열 값을 후보에 넣는다
     for x in range(N):
         for y in range(M):
-            if board[x][y] == max_val:
+            if board[x][y] == max_val and not (x == ax and y == ay):
                 # 현재 포탑의 공격 상태, 행과 열 합, 열, x, y좌표 순으로 저장
                 max_coors.append((attack_state[x][y], x + y, y, x, y))
     max_coors.sort(key=lambda x:(x[0], x[1], x[2]))
