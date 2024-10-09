@@ -7,6 +7,8 @@ def is_range(x, y):
 # 플레이어 움직임
 def move_player(number):
     x, y, d, s, g = players[number]  # 좌표(x, y), 방향(d), 초기 능력치(s), 총(g)
+    # print(number, players)
+    # print(player_coors)
     del player_coors[(x, y)]
     nx = x + dx[d]
     ny = y + dy[d]
@@ -14,11 +16,11 @@ def move_player(number):
         d = (d + 2) % 4
         nx = x + dx[d]
         ny = y + dy[d]
+
     # 움직이려는 곳에 플레이어가 없을 경우
     if (nx, ny) not in player_coors:
         if len(gun_board[nx][ny]) > 0:
             strong_gun = max(gun_board[nx][ny])
-            strong_gun_idx = gun_board[nx][ny].index(strong_gun)
             if strong_gun > g:
                 # 기존에 가지고 있던 총이
                 if g > 0:
@@ -36,7 +38,8 @@ def move_player(number):
         # print(nx, ny, d, s, g)
         # print(tx, ty, td, ts, tg)
         del player_coors[(nx, ny)]
-        if tx != nx and ty != ny:
+        if not (tx == nx and ty == ny):
+            player_coors[(x, y)] = number
             return
         diff = abs((s + g) - (ts + tg))
         target_win = False
@@ -54,9 +57,9 @@ def move_player(number):
                 gun_board[tx][ty].append(tg)
             tg = 0
             for i in range(4):
-                td = (td + i) % 4
-                ntx = tx + dx[td]
-                nty = ty + dy[td]
+                tdd = (td + i) % 4
+                ntx = tx + dx[tdd]
+                nty = ty + dy[tdd]
                 if not is_range(ntx, nty) or (ntx, nty) in player_coors:
                     continue
                 # 플레이어가 없으니 빈 칸이기에 움직인다.
@@ -65,12 +68,12 @@ def move_player(number):
                     t_strong_gun = max(gun_board[ntx][nty])
                     gun_board[ntx][nty].remove(t_strong_gun)
                     tg = t_strong_gun
-                    tx, ty = ntx, nty
-                    break
+                td = tdd
+                tx, ty = ntx, nty
+                break
             if len(gun_board[nx][ny]) > 0:
                 # 이긴 플레이어의 경우 해당 칸에서 공격력 높은 총 획득
                 strong_gun = max(gun_board[nx][ny])
-                strong_gun_idx = gun_board[nx][ny].index(strong_gun)
                 if strong_gun > g:
                     # 기존에 가지고 있던 총이
                     if g > 0:
@@ -79,14 +82,17 @@ def move_player(number):
                     gun_board[nx][ny].remove(strong_gun)
             # 이긴, 진 플레이어 좌표 및 정보 갱신
         else:
+
             score[target] += diff
             if g > 0:
                 gun_board[nx][ny].append(g)
             g = 0
+            # print(player_coors)
             for i in range(4):
-                d = (d + i) % 4
-                nnx = nx + dx[d]
-                nny = ny + dy[d]
+                dd = (d + i) % 4
+                nnx = nx + dx[dd]
+                nny = ny + dy[dd]
+                # print(nnx, nny, gun_board[nnx][nny])
                 if not is_range(nnx, nny) or (nnx, nny) in player_coors:
                     continue
                 # 플레이어가 없으니 빈 칸이기에 움직인다.
@@ -95,18 +101,20 @@ def move_player(number):
                     strong_gun = max(gun_board[nnx][nny])
                     gun_board[nnx][nny].remove(strong_gun)
                     g = strong_gun
-                    nx, ny = nnx, nny
-                    break
+                d = dd
+                nx, ny = nnx, nny
+                # print(i)
+                break
             # 이긴 플레이어의 경우 해당 칸에서 공격력 높은 총 획득
             if len(gun_board[tx][ty]) > 0:
                 strong_gun = max(gun_board[tx][ty])
-                strong_gun_idx = gun_board[tx][ty].index(strong_gun)
                 if strong_gun > tg:
                     # 기존에 가지고 있던 총이
                     if tg > 0:
                         gun_board[tx][ty].append(tg)
                     tg = strong_gun
                     gun_board[tx][ty].remove(strong_gun)
+
         player_coors[(tx, ty)] = target
         players[target] = [tx, ty, td, ts, tg]
         player_coors[(nx, ny)] = number
