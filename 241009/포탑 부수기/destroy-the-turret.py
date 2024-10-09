@@ -33,7 +33,8 @@ def attack(ax, ay, time):
     # 2.1. 가장 강한 포탑의 공격력을 구한다
     for i in range(N):
         for j in range(M):
-            if board[i][j] > 0:
+            # 공격자의 공격력을 높였기 때문에 해당 좌표가 같지 않을 때를 파악해야한다.
+            if board[i][j] > 0 and not (i == ax and j == ay):
                 max_val = max(max_val, board[i][j])
     # 2.2. 강한 포탑의 좌표들과 최근 공격한 시간, 행과 열 합, 열 값을 후보에 넣는다
     for x in range(N):
@@ -45,6 +46,7 @@ def attack(ax, ay, time):
     x, y = max_coors[0][-2], max_coors[0][-1]
     attack_state[x][y] = time # 공격시간 갱신
     related_attack[x][y] = True # 공격에 관련됨
+    # print(x, y, board[x][y])
     attack_done = laser_attack(ax, ay, x, y) # 선정 공격자 좌표 및 공격 당할 좌표
     if not attack_done:
         bomb_attack(x, y, board[ax][ay])
@@ -111,11 +113,19 @@ dy = [1, 0, -1, 0]
 N, M, K = map(int, input().split())
 board = [list(map(int, input().split())) for _ in range(N)]
 attack_state = [[0] * M for _ in range(N)]
-for i in range(1, K + 1):
+for t in range(1, K + 1):
     # 부서지지 않은 포탑이 1개면 즉시 중지 !!!!!
+    cnt = 0
+    for i in range(N):
+        for j in range(M):
+            if board[i][j] > 0:
+                cnt += 1
+    if cnt == 1:
+        break
     related_attack = [[False] * M for _ in range(N)]
-    ax, ay = find_attacker(i)
-    attack(ax, ay, i)
+    ax, ay = find_attacker(t)
+    # print(ax, ay, board[ax][ay])
+    attack(ax, ay, t)
     # for z in board:
     #     print(z)
     # print('---')
