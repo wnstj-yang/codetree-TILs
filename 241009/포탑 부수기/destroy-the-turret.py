@@ -44,7 +44,7 @@ def attack(ax, ay, time):
                 max_coors.append((attack_state[x][y], x + y, y, x, y))
     max_coors.sort(key=lambda x:(x[0], x[1], x[2]))
     x, y = max_coors[0][-2], max_coors[0][-1]
-    attack_state[x][y] = time # 공격시간 갱신
+    # attack_state[x][y] = time # 공격시간 갱신
     related_attack[x][y] = True # 공격에 관련됨
     # print(x, y, board[x][y])
     attack_done = laser_attack(ax, ay, x, y) # 선정 공격자 좌표 및 공격 당할 좌표
