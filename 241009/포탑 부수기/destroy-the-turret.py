@@ -44,12 +44,11 @@ def attack(ax, ay, time):
                 max_coors.append((attack_state[x][y], x + y, y, x, y))
     max_coors.sort(key=lambda x:(x[0], x[1], x[2]))
     x, y = max_coors[0][-2], max_coors[0][-1]
-    # attack_state[x][y] = time # 공격시간 갱신
+
     related_attack[x][y] = True # 공격에 관련됨
-    # print(x, y, board[x][y])
     attack_done = laser_attack(ax, ay, x, y) # 선정 공격자 좌표 및 공격 당할 좌표
     if not attack_done:
-        bomb_attack(x, y, board[ax][ay])
+        bomb_attack(x, y, ax, ay, board[ax][ay])
 
 # 2.1. 레이저 공격
 def laser_attack(ax, ay, tx, ty):
@@ -76,7 +75,7 @@ def laser_attack(ax, ay, tx, ty):
     return False
 
 # 2.2. 포탄 공격
-def bomb_attack(x, y, value):
+def bomb_attack(x, y, ax, ay, value):
     # 기존 우하좌상 + 대각선 추가
     ddx = dx + [-1, -1, 1, 1]
     ddy = dy + [-1, 1, 1, -1]
@@ -86,7 +85,8 @@ def bomb_attack(x, y, value):
     for i in range(8):
         nx = (x + ddx[i]) % N
         ny = (y + ddy[i]) % M
-        if board[nx][ny] > 0:
+        # 포탄 공격 시에도 공격자의 위치를 건들지 않게한다.
+        if board[nx][ny] > 0 and not (nx == ax and ny == ay):
             related_attack[nx][ny] = True
             board[nx][ny] -= decrease_val
 
