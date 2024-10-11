@@ -80,6 +80,8 @@ for i in range(1, N + 1):
 
 for i in range(Q):
     num, d = map(int, input().split())
+    if damaged[num][1] == 0:
+        continue
     move_list = move_check(num, d)
     if move_list[0] != -1:
         knight_board = move_knights(move_list, num, d)
