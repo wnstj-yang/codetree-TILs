@@ -58,15 +58,15 @@ def check_product(arr):
     visited = [[False] * 5 for _ in range(5)]
     total = 0
     total_list = []
-    for x in range(5):
-        for y in range(5):
-            if not visited[x][y]:
+    for i in range(5):
+        for j in range(5):
+            if not visited[i][j]:
                 q = deque()
-                q.append((x, y))
-                visited[x][y] = True
-                num = arr[x][y]
+                q.append((i, j))
+                visited[i][j] = True
+                num = arr[i][j]
                 cnt = 1
-                cnt_list = [(x, y)]
+                cnt_list = [(i, j)]
                 while q:
                     x, y = q.popleft()
                     for d in range(4):
@@ -95,23 +95,32 @@ add_list = list(map(int, input().split()))
 dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 total_result = []
-for _ in range(K):
+for o in range(K):
+    # print(o, '번')
     max_result = []
     for x in range(3):
         for y in range(3):
             result = rotate_check(x, y)
             if result[0] != 0:
                 max_result.append(result)
-
+    # for z in board:
+    #     print(z)
+    # print('---')
     if len(max_result) > 0:
         max_result.sort(key=lambda x: (-x[0], x[1], x[2], x[3]))
         val, d, cy, cx, max_list = max_result[0]
-        copy_board = [item[:] for item in board]
-        board = rotate(cx - 1, cy - 1, board, copy_board)
+        # print(max_result)
+        # print(d // 90)
+        for _ in range(d // 90):
+            copy_board = [item[:] for item in board]
+            board = rotate(cx - 1, cy - 1, board, copy_board)
         max_list.sort(key=lambda x: (x[1], -x[0]))
         # print(add_list)
         # print(max_list)
         # print('회전과 1차까지 돈 이후', val, d, cx, cy)
+        # for z in board:
+        #     print(z)
+        # print('---')
         for x, y in max_list:
             new_val = add_list.pop(0)
             board[x][y] = new_val
@@ -131,8 +140,9 @@ for _ in range(K):
             # print(add_list)
             # print(result_list)
             for x, y in result_list:
-                new_val = add_list.pop(0)
-                board[x][y] = new_val
+                if add_list:
+                    new_val = add_list.pop(0)
+                    board[x][y] = new_val
             # for z in board:
             #     print(z)
             # print('---')
