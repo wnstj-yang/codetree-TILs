@@ -71,7 +71,7 @@ for i in range(N):
 
 for i in range(M):
     players_directions[i + 1] = {}
-    for j in range(M):
+    for j in range(4):
         players_directions[i + 1][j + 1] = list(map(int, input().split()))
 
 turn = 1
