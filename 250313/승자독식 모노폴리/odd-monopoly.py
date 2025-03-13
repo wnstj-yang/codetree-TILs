@@ -7,36 +7,41 @@ def is_range(x, y):
 def move():
     next_board = [item[:] for item in board]
     next_players = {}
-    for key, value in players.items():
+    for num, value in players.items():
+        # print(num ,value)
         x, y = value
-        if len(board[x][y]) > 0:
-            num, d, cnt = board[x][y]
-            is_moved = False
+        d, cnt = board[x][y][1], board[x][y][2]
+        # 이거 왜 다른지 확인해야함 !
+        # print(key, board[x][y])
+        is_moved = False
+        for nd in players_directions[num][d]:
+            nx = x + dx[nd]
+            ny = y + dy[nd]
+            if is_range(nx, ny):
+                if len(board[nx][ny]) == 0:
+                    # 한 공간에 겹치는 경우 숫자가 작은 것이 남는다.
+                    if len(next_board[nx][ny]) > 0 and next_board[nx][ny][0] < num:
+                        is_moved = True
+                        break
+                    if len(next_board[nx][ny]) > 0:
+                        prev_num = next_board[nx][ny][0]
+                        del next_players[prev_num]
+                    next_players[num] = [nx, ny]
+                    next_board[nx][ny] = [num, nd, K]
+                    new_occupy[nx][ny] = True
+                    is_moved = True
+                    break
+
+        if not is_moved:
+            # print(players_directions)
             for nd in players_directions[num][d]:
                 nx = x + dx[nd]
                 ny = y + dy[nd]
-                if is_range(nx, ny):
-                    if len(board[nx][ny]) == 0:
-                        # 한 공간에 겹치는 경우 숫자가 작은 것이 남는다.
-                        if new_occupy[nx][ny] and next_board[nx][ny][0] < num:
-                            is_moved = True
-                            break
-                        next_players[num] = [nx, ny]
-                        next_board[nx][ny] = [num, nd, K]
-                        new_occupy[nx][ny] = True
-                        is_moved = True
-                        break
-
-            if not is_moved:
-                # print(players_directions)
-                for nd in players_directions[num][d]:
-                    nx = x + nd
-                    ny = y + nd
-                    if is_range(nx, ny) and len(board[nx][ny]) > 0 and board[nx][ny][0] == num:
-                        next_players[num] = [nx, ny]
-                        next_board[nx][ny] = [num, nd, K]
-                        new_occupy[nx][ny] = True
-                        break
+                if is_range(nx, ny) and len(board[nx][ny]) > 0 and board[nx][ny][0] == num:
+                    next_players[num] = [nx, ny]
+                    next_board[nx][ny] = [num, nd, K]
+                    new_occupy[nx][ny] = True
+                    break
     # for num in remove_players:
     #     del players[num]
     return next_players, next_board
@@ -75,6 +80,7 @@ for i in range(M):
         players_directions[i + 1][j + 1] = list(map(int, input().split()))
 
 turn = 1
+# print(players)
 while turn <= 1000:
     new_occupy = [[False] * N for _ in range(N)]
     players, board = move()
