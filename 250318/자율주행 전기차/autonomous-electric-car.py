@@ -57,7 +57,7 @@ def find_flag(sx, sy, target):
             if is_range(nx, ny) and not visited[nx][ny] and board[nx][ny] != 1:
                 if nx == ex and ny == ey:
                     del positions[target]
-                    return [nx, ny, (b - 1) + (battery - (b - 1)) * 2]
+                    return [nx, ny, b + (battery - (b - 1)) * 2]
                 visited[nx][ny] = True
                 q.append((nx, ny, b - 1))
     return [-1, -1, -1]
