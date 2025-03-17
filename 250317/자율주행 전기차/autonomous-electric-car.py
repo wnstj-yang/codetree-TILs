@@ -6,7 +6,7 @@ def is_range(x, y):
     return True
 
 def search(sx, sy):
-    global C
+    global result
 
     if board[sx][sy] > 1:
         return [sx, sy, board[sx][sy]]
@@ -32,7 +32,7 @@ def search(sx, sy):
     if candidates:
         candidates.sort(key=lambda x:(-x[0], x[1], x[2]))
         b, x, y, num = candidates[0]
-        C = b
+        result = b
         return [x, y, num]
     # 사람을 못태웠다면 기름이 부족해서이므로 끝
     else:
@@ -89,7 +89,7 @@ while positions:
         break
     board[sx][sy] = 0
     # print('search', sx, sy, C)
-    sx, sy, C = find_flag(sx, sy, target)
+    sx, sy, result = find_flag(sx, sy, target)
     if sx == -1:
         break
     # print('find', sx, sy, C)
@@ -97,6 +97,6 @@ while positions:
     # for z in board:
     #     print(z)
     # print('---------', C, sx, sy)
-print(C)
+print(result)
 
 
