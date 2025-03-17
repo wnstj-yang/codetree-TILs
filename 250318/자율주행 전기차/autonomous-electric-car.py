@@ -77,26 +77,15 @@ for i in range(M):
     board[xs - 1][ys - 1] = i + 2
 
 result = -1
-# print('처음')
-# print(positions)
-# for z in board:
-#     print(z)
 while positions:
 
     sx, sy, target = search(sx, sy)
     if sx == -1:
         break
     board[sx][sy] = 0
-    # print('search', sx, sy, result)
     sx, sy, C = find_flag(sx, sy, target)
     result = C
     if sx == -1:
         break
-    # print('find', sx, sy, result)
-    # print(positions)
-    # for z in board:
-    #     print(z)
-    # print('---------', sx, sy, result)
+
 print(result)
-
-
