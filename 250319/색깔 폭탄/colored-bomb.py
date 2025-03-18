@@ -19,6 +19,7 @@ def search_explosion():
                 coors = [(i, j)]
                 red_coors = []
                 cnt, red_cnt = 1, 0
+                cx, cy = i, j
                 # 총 개수, 빨간색폭탄 개수, 기준점 행, 열
                 # 행은 가장 큰, 열은 가장 작은 것
                 while q:
@@ -34,10 +35,16 @@ def search_explosion():
                             if board[nx][ny] == 0:
                                 red_coors.append((nx, ny))
                                 red_cnt += 1
+                            # 인접 4방향 상하좌우기 때문에 좌표별로 max, min처리가 가능하다.
+                            # 그렇지 대각선이나 그런경우가 있다면 해당 방법은 적용하기 어려울 수 있음. (포함되지 않는 좌표가 택해질 수 있음)
+                            else:
+                                cx = max(cx, nx)
+                                cy = min(cy, ny)
 
                 if cnt > 1:
-                    coors.sort(key=lambda x:(-x[0], x[1]))
-                    cx, cy = coors[0]
+                    # coors안에는 red도 있기 때문에 정렬로해서 기준점을 구할 수 없다.
+                    # coors.sort(key=lambda x:(-x[0], x[1]))
+                    # cx, cy = coors[0]
                     explode_list.append([cnt, red_cnt, cx, cy, coors])
                 # 빨간부분에 대한 방문표시 초기화
                 for rx, ry in red_coors:
