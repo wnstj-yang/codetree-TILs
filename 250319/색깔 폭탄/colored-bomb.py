@@ -19,7 +19,6 @@ def search_explosion():
                 coors = [(i, j)]
                 red_coors = []
                 cnt, red_cnt = 1, 0
-                cx, cy = i, j
                 # 총 개수, 빨간색폭탄 개수, 기준점 행, 열
                 # 행은 가장 큰, 열은 가장 작은 것
                 while q:
@@ -35,12 +34,10 @@ def search_explosion():
                             if board[nx][ny] == 0:
                                 red_coors.append((nx, ny))
                                 red_cnt += 1
-                            # 체크할 부분. max와 min 제대로된 동작하는지?
-                            else:
-                                cx = max(cx, nx)
-                                cy = min(cy, ny)
-                # 다시 체크해보기
+
                 if cnt > 1:
+                    coors.sort(key=lambda x:(-x[0], x[1]))
+                    cx, cy = coors[0]
                     explode_list.append([cnt, red_cnt, cx, cy, coors])
                 # 빨간부분에 대한 방문표시 초기화
                 for rx, ry in red_coors:
@@ -65,7 +62,7 @@ def gravity():
     for j in range(N):
         cnt = 0
         for i in range(N - 1, -1, -1):
-            if board[i][j] == 0:
+            if board[i][j] == -2:
                 cnt += 1
             elif board[i][j] == -1:
                 cnt = 0
@@ -88,10 +85,10 @@ while True:
         result += len(explosion_list) ** 2
         for x, y in explosion_list:
             board[x][y] = -2
+        gravity()
+        board = rotate_90()
+        gravity()
     else:
         break
-    gravity()
-    board = rotate_90()
-    gravity()
 
 print(result)
