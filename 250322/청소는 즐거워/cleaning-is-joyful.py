@@ -8,8 +8,6 @@ def move(x, y):
     tx = x + dx[d]
     ty = y + dy[d]
 
-    # if not is_range(tx, ty):
-    #     return -1, -1
     curr = board[tx][ty]
     board[tx][ty] = 0
     curr_dust = 0 # 비율에 맞는 먼지 수
@@ -21,7 +19,6 @@ def move(x, y):
         curr_dust += dust
         if is_range(nx, ny):
             board[nx][ny] = int(board[nx][ny] + dust)
-            # curr_dust += dust
         else:
             total_dust += dust
     nx = tx + dx[d]
@@ -75,9 +72,4 @@ while True:
     if x == 0 and y == 0:
         break
     x, y = move(x, y)
-    # for z in board:
-    #     print(z)
-    # break
-    # if x == 0 and y == 0:
-    #     break
 print(total_dust)
