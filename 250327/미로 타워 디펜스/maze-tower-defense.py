@@ -1,5 +1,3 @@
-from collections import deque
-
 def is_range(x, y):
     if x < 0 or x >= N or y < 0 or y >= N:
         return False
@@ -38,6 +36,7 @@ def set_monsters():
     sd = 2
     idx = 0
     next_board = [[0] * N for _ in range(N)]
+
     while length < N:
         nx = sx + dx[sd]
         ny = sy + dy[sd]
@@ -62,6 +61,8 @@ def set_monsters():
 
 
 def check_duplicate():
+    global total
+
     length = 1
     length_cnt = 0
     cnt = 2
@@ -69,7 +70,7 @@ def check_duplicate():
     sd = 2
     prev = board[sx][sy]
     val_cnt = 0
-    delete_list = {}
+    is_checked = False
     duplicate = []
     while length < N:
         nx = sx + dx[sd]
@@ -79,7 +80,10 @@ def check_duplicate():
             duplicate.append((nx, ny))
         else:
             if val_cnt >= 4:
-                delete_list[prev] = duplicate
+                is_checked = True
+                for x, y in duplicate:
+                    board[x][y] = 0
+                total += (prev * val_cnt)
             val_cnt = 1
             prev = board[nx][ny]
             duplicate = [(nx, ny)]
@@ -96,8 +100,7 @@ def check_duplicate():
                 else:
                     cnt = 2
         sx, sy = nx, ny
-    return delete_list
-
+    return is_checked
 
 def set_new_board():
     length = 1
@@ -115,8 +118,7 @@ def set_new_board():
             val_cnt += 1
         else:
             if prev > 0:
-                set_list.append(val_cnt)
-                set_list.append(prev)
+                set_list.extend([val_cnt, prev])
             val_cnt = 1
             prev = board[nx][ny]
 
@@ -166,7 +168,6 @@ dy = [1, 0, -1, 0]
 N, M = map(int, input().split())
 board = [list(map(int, input().split())) for _ in range(N)]
 total = 0
-cd = 2
 cx, cy = N // 2, N // 2
 for _ in range(M):
     d, p = map(int, input().split())
@@ -177,19 +178,11 @@ for _ in range(M):
         if is_range(nx, ny):
             total += board[nx][ny]
             board[nx][ny] = 0
-        else:
-            break
+            
     board = set_monsters()
-    while True:
-        delete_list = check_duplicate()
-        if len(delete_list) == 0:
-            break
-        else:
-            for val, coors in delete_list.items():
-                total += (val * len(coors))
-                for x, y in coors:
-                    board[x][y] = 0
-            board = set_monsters()
+    while check_duplicate():
+        board = set_monsters()
     board = set_new_board()
+
 
 print(total)
